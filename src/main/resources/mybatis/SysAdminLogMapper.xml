@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.famework.myframedwz.domain.dao.SysAdminLogMapper" >
+  <resultMap id="BaseResultMap" type="com.famework.myframedwz.domain.model.SysAdminLog" >
+    <id column="lid" property="lid" jdbcType="BIGINT" />
+    <result column="ip_address" property="ipAddress" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="operation_state" property="operationState" jdbcType="TINYINT" />
+    <result column="operation_type" property="operationType" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    lid, ip_address, add_time, account, account_name, content, operation_state, operation_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_admin_log
+    where lid = #{lid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_admin_log
+    where lid = #{lid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.famework.myframedwz.domain.model.SysAdminLog" >
+    insert into sys_admin_log (lid, ip_address, add_time, 
+      account, account_name, content, 
+      operation_state, operation_type)
+    values (#{lid,jdbcType=BIGINT}, #{ipAddress,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{account,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{operationState,jdbcType=TINYINT}, #{operationType,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.famework.myframedwz.domain.model.SysAdminLog" >
+    insert into sys_admin_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="lid != null" >
+        lid,
+      </if>
+      <if test="ipAddress != null" >
+        ip_address,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="accountName != null" >
+        account_name,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="operationState != null" >
+        operation_state,
+      </if>
+      <if test="operationType != null" >
+        operation_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="lid != null" >
+        #{lid,jdbcType=BIGINT},
+      </if>
+      <if test="ipAddress != null" >
+        #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="operationState != null" >
+        #{operationState,jdbcType=TINYINT},
+      </if>
+      <if test="operationType != null" >
+        #{operationType,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.famework.myframedwz.domain.model.SysAdminLog" >
+    update sys_admin_log
+    <set >
+      <if test="ipAddress != null" >
+        ip_address = #{ipAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="operationState != null" >
+        operation_state = #{operationState,jdbcType=TINYINT},
+      </if>
+      <if test="operationType != null" >
+        operation_type = #{operationType,jdbcType=TINYINT},
+      </if>
+    </set>
+    where lid = #{lid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.famework.myframedwz.domain.model.SysAdminLog" >
+    update sys_admin_log
+    set ip_address = #{ipAddress,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      account = #{account,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      operation_state = #{operationState,jdbcType=TINYINT},
+      operation_type = #{operationType,jdbcType=TINYINT}
+    where lid = #{lid,jdbcType=BIGINT}
+  </update>
+</mapper>

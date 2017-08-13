@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.famework.myframedwz.domain.dao.SysRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.famework.myframedwz.domain.model.SysRole" >
+    <id column="rid" property="rid" jdbcType="BIGINT" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="sort_index" property="sortIndex" jdbcType="INTEGER" />
+    <result column="role_describe" property="roleDescribe" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rid, role_name, sort_index, role_describe, add_time 
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role
+    where rid = #{rid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_role
+    where rid = #{rid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.famework.myframedwz.domain.model.SysRole" >
+    insert into sys_role (rid, role_name, 
+      role_describe, add_time)
+    values (#{rid,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR},  
+      #{roleDescribe,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.famework.myframedwz.domain.model.SysRole" >
+    insert into sys_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        rid,
+      </if>
+      <if test="roleName != null" >
+        role_name,
+      </if>
+      <if test="sortIndex != null" >
+        sort_index,
+      </if>
+      <if test="roleDescribe != null" >
+        role_describe,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rid != null" >
+        #{rid,jdbcType=BIGINT},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="sortIndex != null" >
+        #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="roleDescribe != null" >
+        #{roleDescribe,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.famework.myframedwz.domain.model.SysRole" >
+    update sys_role
+    <set >
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="sortIndex != null" >
+        sort_index = #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="roleDescribe != null" >
+        role_describe = #{roleDescribe,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rid = #{rid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.famework.myframedwz.domain.model.SysRole" >
+    update sys_role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      sort_index = #{sortIndex,jdbcType=INTEGER},
+      role_describe = #{roleDescribe,jdbcType=VARCHAR}
+    where rid = #{rid,jdbcType=BIGINT}
+  </update>
+  <!-- diy -->
+  <select id="queryAllRolelistPage" parameterType="SysRole" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />  
+    from sys_role
+    <trim prefix="WHERE" prefixOverrides="AND|OR">
+    	1=1
+		<if test="roleName != null">
+		AND role_name like CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="roleDescribe != null">
+		AND role_describe like CONCAT('%',#{roleDescribe,jdbcType=VARCHAR},'%')
+		</if>
+    </trim>
+    order by add_time desc
+  </select>
+  <delete id="batchDelRole" parameterType="string" >
+    delete from sys_role
+    where rid in 
+	<foreach item="idItem" collection="array" open="(" separator="," close=")">
+	#{idItem}
+	</foreach>
+  </delete>
+</mapper>

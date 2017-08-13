@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<!-- <web:jsp-config>
+		<web:jsp-property-group>
+			<web:el-ignored>false</web:el-ignored>
+		</web:jsp-property-group>
+	</web:jsp-config> -->
+	<display-name>myframedwz</display-name>
+	<context-param>  
+      <param-name>webAppRootKey</param-name>  
+      <param-value>myframedwz.webapp.root</param-value>  
+  	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:spring/spring-*.xml</param-value>
+	</context-param>
+	<filter>
+	  <description>spring encoding Filter</description>
+	  <filter-name>encodingFilter</filter-name>
+	  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	  <init-param>
+	    <description>chars encode</description>
+	    <param-name>encoding</param-name>
+	    <param-value>UTF-8</param-value>
+	  </init-param>
+	</filter>
+	<filter-mapping>
+	  <filter-name>encodingFilter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>timeOutFilter</filter-name>
+		<filter-class>com.famework.myframedwz.domain.common.filter.SessionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>timeOutFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<!-- apache shiro -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- <filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping> -->
+	<!-- login -->
+	<!-- <filter>
+		<filter-name>sessionFilter</filter-name>
+		<filter-class>com.famework.myframedwz.domain.common.filter.OnlineFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>sessionFilter</filter-name>
+		<url-pattern>/login.html</url-pattern>
+	</filter-mapping> -->
+	<filter>
+	  <filter-name>httpcontent</filter-name>
+	  <filter-class>com.famework.myframedwz.domain.common.filter.GetContent</filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>httpcontent</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+	  <description>spring listener</description>
+	  <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<servlet>
+	  <description>spring mvc servlet</description>
+	  <servlet-name>springMvc</servlet-name>
+	  <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	  <init-param>
+	    <description>spring mvc config</description>
+	    <param-name>contextConfigLocation</param-name>
+	    <param-value>classpath:spring/spring-mvc.xml</param-value>
+	  </init-param>
+	  <load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+	  <servlet-name>springMvc</servlet-name>
+	  <url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+  <!-- kaptcha servlet -->
+	<servlet>  
+	    <servlet-name>kaptcha</servlet-name>  
+	    <servlet-class>  
+	        com.google.code.kaptcha.servlet.KaptchaServlet  
+	    </servlet-class>  
+	</servlet>  
+	<servlet-mapping>  
+	    <servlet-name>kaptcha</servlet-name>  
+	    <url-pattern>/images/kaptcha.jpg</url-pattern>  
+	</servlet-mapping>
+	<welcome-file-list>
+	   <welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- 配置错误页面 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>505</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<!-- 配置异常处理 -->
+	<error-page>
+		<exception-type>javax.servle.ServletException</exception-type>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.NullPointerException</exception-type>
+		<location>/error.jsp</location>
+	</error-page>
+</web-app>

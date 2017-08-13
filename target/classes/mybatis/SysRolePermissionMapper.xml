@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.famework.myframedwz.domain.dao.SysRolePermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.famework.myframedwz.domain.model.SysRolePermission" >
+    <id column="rpid" property="rpid" jdbcType="BIGINT" />
+    <result column="is_enabled" property="isEnabled" jdbcType="TINYINT" />
+    <result column="rid" property="rid" jdbcType="BIGINT" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rpid, is_enabled, rid, pid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role_permission
+    where rpid = #{rpid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_role_permission
+    where rpid = #{rpid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.famework.myframedwz.domain.model.SysRolePermission" >
+    insert into sys_role_permission (rpid, is_enabled, rid, 
+      pid)
+    values (#{rpid,jdbcType=BIGINT}, #{isEnabled,jdbcType=TINYINT}, #{rid,jdbcType=BIGINT}, 
+      #{pid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.famework.myframedwz.domain.model.SysRolePermission" >
+    insert into sys_role_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rpid != null" >
+        rpid,
+      </if>
+      <if test="isEnabled != null" >
+        is_enabled,
+      </if>
+      <if test="rid != null" >
+        rid,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rpid != null" >
+        #{rpid,jdbcType=BIGINT},
+      </if>
+      <if test="isEnabled != null" >
+        #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="rid != null" >
+        #{rid,jdbcType=BIGINT},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.famework.myframedwz.domain.model.SysRolePermission" >
+    update sys_role_permission
+    <set >
+      <if test="isEnabled != null" >
+        is_enabled = #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="rid != null" >
+        rid = #{rid,jdbcType=BIGINT},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rpid = #{rpid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.famework.myframedwz.domain.model.SysRolePermission" >
+    update sys_role_permission
+    set is_enabled = #{isEnabled,jdbcType=TINYINT},
+      rid = #{rid,jdbcType=BIGINT},
+      pid = #{pid,jdbcType=VARCHAR}
+    where rpid = #{rpid,jdbcType=BIGINT}
+  </update>
+  <!-- diy start -->
+  <delete id="batchDelRolePer" parameterType="string" >
+    delete from sys_role_permission 
+    where rid in 
+	<foreach item="idItem" collection="array" open="(" separator="," close=")">
+	#{idItem}
+	</foreach>
+  </delete>
+  <select id="queryRolePer" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select pid from sys_role_permission where is_enabled=1 and rid = #{rid,jdbcType=BIGINT}
+  </select>
+  <delete id="delRolePer" parameterType="java.lang.Long" >
+    delete from sys_role_permission 
+    where rid = #{rid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertBatchRolePer" parameterType="java.util.List">  
+    insert into sys_role_permission (rid, pid)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >  
+       (#{item.rid,jdbcType=BIGINT}, #{item.pid,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <!-- diy end -->
+</mapper>

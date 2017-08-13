@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.famework.myframedwz.domain.dao.SysPermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.famework.myframedwz.domain.model.SysPermission" >
+    <id column="pid" property="pid" jdbcType="VARCHAR" />
+    <result column="permission_name" property="permissionName" jdbcType="VARCHAR" />
+    <result column="parendid" property="parendid" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="SMALLINT" />
+    <result column="sortindex" property="sortindex" jdbcType="INTEGER" />
+    <result column="page_url" property="pageUrl" jdbcType="VARCHAR" />
+    <result column="is_childnode" property="isChildnode" jdbcType="TINYINT" />
+    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pid, permission_name, parendid, level, sortindex, page_url, is_childnode, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_permission
+    where pid = #{pid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_permission
+    where pid = #{pid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.famework.myframedwz.domain.model.SysPermission" >
+    insert into sys_permission (pid, permission_name, parendid, 
+      level, sortindex, page_url, 
+      is_childnode, is_delete)
+    values (#{pid,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, #{parendid,jdbcType=VARCHAR}, 
+      #{level,jdbcType=SMALLINT}, #{sortindex,jdbcType=INTEGER}, #{pageUrl,jdbcType=VARCHAR}, 
+      #{isChildnode,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.famework.myframedwz.domain.model.SysPermission" >
+    insert into sys_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="permissionName != null" >
+        permission_name,
+      </if>
+      <if test="parendid != null" >
+        parendid,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="sortindex != null" >
+        sortindex,
+      </if>
+      <if test="pageUrl != null" >
+        page_url,
+      </if>
+      <if test="isChildnode != null" >
+        is_childnode,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionName != null" >
+        #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="parendid != null" >
+        #{parendid,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=SMALLINT},
+      </if>
+      <if test="sortindex != null" >
+        #{sortindex,jdbcType=INTEGER},
+      </if>
+      <if test="pageUrl != null" >
+        #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isChildnode != null" >
+        #{isChildnode,jdbcType=TINYINT},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.famework.myframedwz.domain.model.SysPermission" >
+    update sys_permission
+    <set >
+      <if test="permissionName != null" >
+        permission_name = #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="parendid != null" >
+        parendid = #{parendid,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=SMALLINT},
+      </if>
+      <if test="sortindex != null" >
+        sortindex = #{sortindex,jdbcType=INTEGER},
+      </if>
+      <if test="pageUrl != null" >
+        page_url = #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isChildnode != null" >
+        is_childnode = #{isChildnode,jdbcType=TINYINT},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.famework.myframedwz.domain.model.SysPermission" >
+    update sys_permission
+    set permission_name = #{permissionName,jdbcType=VARCHAR},
+      parendid = #{parendid,jdbcType=VARCHAR},
+      level = #{level,jdbcType=SMALLINT},
+      sortindex = #{sortindex,jdbcType=INTEGER},
+      page_url = #{pageUrl,jdbcType=VARCHAR},
+      is_childnode = #{isChildnode,jdbcType=TINYINT},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where pid = #{pid,jdbcType=VARCHAR}
+  </update>
+  <!-- Diy start-->
+  <select id="userSysPermissionList" resultMap="BaseResultMap" parameterType="SysAdminList" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from sys_permission where pid in (select pid from sys_admin_permission where cardid=#{cardid,jdbcType=VARCHAR} and permission_source=1) and is_delete=0
+	union
+	select 
+	<include refid="Base_Column_List" /> 
+	from sys_permission where pid in (
+	select pid from sys_role_permission where rid in (select rid from sys_admin_permission where cardid=#{cardid,jdbcType=VARCHAR} and permission_source=0)
+	) and is_delete=0
+  </select>
+  <select id="sysPermissionList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_permission
+  </select>
+  <insert id="insertMenu" parameterType="com.famework.myframedwz.domain.model.SysPermission" >
+    insert into sys_permission (pid, permission_name, parendid, page_url, sortindex)
+    values (#{pid,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, 
+    #{parendid,jdbcType=VARCHAR}, #{pageUrl,jdbcType=VARCHAR}, #{sortindex,jdbcType=INTEGER})
+  </insert>
+  <select id="MenuForPid" resultMap="BaseResultMap" parameterType="string">
+    select 
+    <include refid="Base_Column_List"/>
+    from sys_permission where pid=#{pid,jdbcType=VARCHAR}
+  </select>
+  <select id="checkMenuPid" parameterType="string" resultType="int">
+  	select count(pid) as ct from sys_permission where pid = #{pid,jdbcType=VARCHAR}
+  </select>
+  <update id="menuUpdateForPid" parameterType="com.famework.myframedwz.domain.model.SysPermission" >
+    update sys_permission
+    set permission_name = #{permissionName,jdbcType=VARCHAR},
+      page_url = #{pageUrl,jdbcType=VARCHAR}, sortindex = #{sortindex,jdbcType=INTEGER} 
+    where pid = #{pid,jdbcType=VARCHAR}
+  </update>
+  <delete id="menuDel" parameterType="string" >
+    delete from sys_permission
+    where pid = #{pid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="menuBatchDel" parameterType="string" >
+    delete from sys_permission
+    where pid in 
+	<foreach item="idItem" collection="array" open="(" separator="," close=")">
+	#{idItem}
+	</foreach>
+  </delete>
+  <select id="chkPidsForRole" parameterType="string" resultType="int">
+    select count(pid) as ct from sys_role_permission
+    where pid in 
+	<foreach item="idItem" collection="array" open="(" separator="," close=")">
+	#{idItem}
+	</foreach>
+  </select>
+  <select id="chkPidsForUser" parameterType="string" resultType="int">
+    select count(pid) as ct from sys_admin_permission
+    where permission_source=1 and is_enabled=1 and pid in 
+	<foreach item="idItem" collection="array" open="(" separator="," close=")">
+	#{idItem}
+	</foreach>
+  </select>
+  <select id="chkPidForRole" parameterType="string" resultType="int">
+    select count(pid) as ct from sys_role_permission
+    where pid = #{pid,jdbcType=VARCHAR}
+  </select>
+  <select id="chkPidForUser" parameterType="string" resultType="int">
+    select count(pid) as ct from sys_admin_permission
+    where permission_source=1 and is_enabled=1 and pid = #{pid,jdbcType=VARCHAR}
+  </select>
+  <!-- Diy end -->
+</mapper>

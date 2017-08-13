@@ -1,0 +1,18 @@
+框架使用说明：
+1.框架基于jdk1.7和jboss7.x以及maven3.x开发运行
+
+2.使用的框架包括：
+Mybatis3.2.7+Spring mvc 3.1.1+MySql5.1.31
+
+3.前端UI框架：
+dwz-jui
+
+4.源码包分为：com/famework/myframedwz/domain、com/famework/myframedwz/utils
+在com/famework/myframedwz/domain中：action包表示springmvc控制层；common包表示业务帮助层；dao包表示数据调用层；model包表示模型层；service包表示服务层。
+在com/famework/myframedwz/utils包中表示通用工具类层
+
+5.配置文件目录：src/main/resource
+其中，mybatis文件夹中存放mybatis sql配置文件；spring文件夹存放框架配置文件
+
+6.UI层在webapp目录下：
+其中：uiframe文件夹内放置各种UI框架；pages文件夹放置项目jsp页面；css文件夹存放项目样式文件；images存放项目用到的图片；js存放项目的js文件

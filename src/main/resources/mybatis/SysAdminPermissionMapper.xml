@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.famework.myframedwz.domain.dao.SysAdminPermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.famework.myframedwz.domain.model.SysAdminPermission" >
+    <id column="upid" property="upid" jdbcType="BIGINT" />
+    <result column="rid" property="rid" jdbcType="BIGINT" />
+    <result column="permission_source" property="permissionSource" jdbcType="TINYINT" />
+    <result column="is_enabled" property="isEnabled" jdbcType="TINYINT" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+    <result column="cardid" property="cardid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    upid, rid, permission_source, is_enabled, pid, cardid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_admin_permission
+    where upid = #{upid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_admin_permission
+    where upid = #{upid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.famework.myframedwz.domain.model.SysAdminPermission" >
+    insert into sys_admin_permission (upid, rid, permission_source, 
+      is_enabled, pid, cardid
+      )
+    values (#{upid,jdbcType=BIGINT}, #{rid,jdbcType=BIGINT}, #{permissionSource,jdbcType=TINYINT}, 
+      #{isEnabled,jdbcType=TINYINT}, #{pid,jdbcType=VARCHAR}, #{cardid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.famework.myframedwz.domain.model.SysAdminPermission" >
+    insert into sys_admin_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="upid != null" >
+        upid,
+      </if>
+      <if test="rid != null" >
+        rid,
+      </if>
+      <if test="permissionSource != null" >
+        permission_source,
+      </if>
+      <if test="isEnabled != null" >
+        is_enabled,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="cardid != null" >
+        cardid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="upid != null" >
+        #{upid,jdbcType=BIGINT},
+      </if>
+      <if test="rid != null" >
+        #{rid,jdbcType=BIGINT},
+      </if>
+      <if test="permissionSource != null" >
+        #{permissionSource,jdbcType=TINYINT},
+      </if>
+      <if test="isEnabled != null" >
+        #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        #{cardid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.famework.myframedwz.domain.model.SysAdminPermission" >
+    update sys_admin_permission
+    <set >
+      <if test="rid != null" >
+        rid = #{rid,jdbcType=BIGINT},
+      </if>
+      <if test="permissionSource != null" >
+        permission_source = #{permissionSource,jdbcType=TINYINT},
+      </if>
+      <if test="isEnabled != null" >
+        is_enabled = #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        cardid = #{cardid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where upid = #{upid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.famework.myframedwz.domain.model.SysAdminPermission" >
+    update sys_admin_permission
+    set rid = #{rid,jdbcType=BIGINT},
+      permission_source = #{permissionSource,jdbcType=TINYINT},
+      is_enabled = #{isEnabled,jdbcType=TINYINT},
+      pid = #{pid,jdbcType=VARCHAR},
+      cardid = #{cardid,jdbcType=VARCHAR}
+    where upid = #{upid,jdbcType=BIGINT}
+  </update>
+   <!-- diy start-->
+   <!-- user role setting start-->
+  <select id="queryUserRole" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    rid 
+    from sys_admin_permission
+    where cardid = #{cardid,jdbcType=VARCHAR} and permission_source=0 and is_enabled=1 
+  </select>
+  <insert id="insertBatchUserRole" parameterType="java.util.List">  
+    insert into sys_admin_permission (rid, cardid)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >  
+       (#{item.rid,jdbcType=BIGINT}, #{item.cardid,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  <delete id="delUserRole" parameterType="string" >
+    delete from sys_admin_permission
+    where permission_source=0 and cardid = #{cardid,jdbcType=VARCHAR}
+  </delete>
+  <!-- user role setting end-->
+  <!-- user menu setting start-->
+  <select id="queryUserPer" resultMap="BaseResultMap" parameterType="string" >
+    select 
+    pid 
+    from sys_admin_permission
+    where cardid = #{cardid,jdbcType=VARCHAR} and permission_source=1 and is_enabled=1 
+  </select>
+  <insert id="insertBatchUserPer" parameterType="java.util.List">  
+    insert into sys_admin_permission (pid, cardid, permission_source)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >  
+       (#{item.pid,jdbcType=VARCHAR}, #{item.cardid,jdbcType=VARCHAR}, #{item.permissionSource,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+  <delete id="delUserPer" parameterType="string" >
+    delete from sys_admin_permission
+    where permission_source=1 and cardid = #{cardid,jdbcType=VARCHAR}
+  </delete>
+  <!-- user menu setting end-->
+  <select id="chkAllUserRole" resultType="int" parameterType="string" >
+    select count(rid) as ct from sys_admin_permission where permission_source=0 and rid in 
+    <foreach item="idItem" collection="array" open="(" separator="," close=")">
+	#{idItem}
+	</foreach>
+  </select>
+  <delete id="userRoleAndPerDel" parameterType="string" >
+    delete from sys_admin_permission 
+    where cardid in 
+	<foreach item="idItem" collection="array" open="(" separator="," close=")">
+	#{idItem}
+	</foreach>
+  </delete>
+  <!-- diy end-->
+</mapper>
